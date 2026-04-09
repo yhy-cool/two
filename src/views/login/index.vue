@@ -48,6 +48,15 @@ const handleLogin = async () => {
     const res = await login(loginForm.value)
     // 保存token到localStorage
     localStorage.setItem('token', res.token)
+    // 保存用户信息到localStorage（模拟）
+    const userInfo = {
+      id: 1,
+      username: loginForm.value.username,
+      name: loginForm.value.username === 'admin' ? '管理员' : '普通用户',
+      email: `${loginForm.value.username}@example.com`,
+      role: loginForm.value.username === 'admin' ? 'admin' : 'user'
+    }
+    localStorage.setItem('userInfo', JSON.stringify(userInfo))
     ElMessage.success(t('login.loginSuccess'))
     // 跳转到首页
     router.push('/')

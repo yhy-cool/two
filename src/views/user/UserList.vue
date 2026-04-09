@@ -3,19 +3,19 @@
     <el-card>
       <template #header>
         <div class="card-header">
-          <span>用户管理</span>
+          <span>{{ t('user.userManagement') }}</span>
           <div class="header-actions">
             <el-button type="primary" @click="handleAddUser">
               <el-icon><Plus /></el-icon>
-              添加用户
+              {{ t('user.addUser') }}
             </el-button>
             <el-button type="warning" @click="handleBatchDelete" :disabled="selectedUserIds.length === 0">
               <el-icon><Delete /></el-icon>
-              批量删除
+              {{ t('user.batchDelete') }}
             </el-button>
             <el-button type="info" @click="handleExportExcel">
               <el-icon><Download /></el-icon>
-              导出Excel
+              {{ t('user.exportExcel') }}
             </el-button>
           </div>
         </div>
@@ -24,7 +24,7 @@
       <div class="search-bar">
         <el-input
           v-model="searchQuery"
-          placeholder="搜索用户名或邮箱"
+          :placeholder="t('user.searchPlaceholder')"
           clearable
           style="width: 300px"
           @keyup.enter="handleSearch"
@@ -44,33 +44,33 @@
         @selection-change="handleSelectionChange"
       >
         <el-table-column type="selection" width="55" />
-        <el-table-column prop="id" label="ID" width="80" />
-        <el-table-column prop="username" label="用户名" />
-        <el-table-column prop="email" label="邮箱" />
-        <el-table-column prop="status" label="状态" width="100">
+        <el-table-column prop="id" :label="t('user.id')" width="80" />
+        <el-table-column prop="username" :label="t('user.username')" />
+        <el-table-column prop="email" :label="t('user.email')" />
+        <el-table-column prop="status" :label="t('user.status')" width="100">
           <template #default="scope">
             <el-tag :type="scope.row.status === 'active' ? 'success' : 'danger'">
-              {{ scope.row.status === 'active' ? '启用' : '冻结' }}
+              {{ scope.row.status === 'active' ? t('user.active') : t('user.inactive') }}
             </el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="createdAt" label="创建时间" width="180" />
-        <el-table-column label="操作" width="200">
+        <el-table-column prop="createdAt" :label="t('user.createdAt')" width="180" />
+        <el-table-column :label="t('user.actions')" width="200">
           <template #default="scope">
             <el-button size="small" @click="handleEditUser(scope.row)">
               <el-icon><Edit /></el-icon>
-              编辑
+              {{ t('user.edit') }}
             </el-button>
             <el-button size="small" type="danger" @click="handleDeleteUser(scope.row.id)">
               <el-icon><Delete /></el-icon>
-              删除
+              {{ t('user.delete') }}
             </el-button>
             <el-button
               size="small"
               :type="scope.row.status === 'active' ? 'warning' : 'success'"
               @click="handleToggleStatus(scope.row.id, scope.row.status === 'active' ? 'inactive' : 'active')"
             >
-              {{ scope.row.status === 'active' ? '冻结' : '启用' }}
+              {{ scope.row.status === 'active' ? t('user.freeze') : t('user.enable') }}
             </el-button>
           </template>
         </el-table-column>
@@ -92,7 +92,7 @@
     <!-- 添加/编辑用户对话框 -->
     <el-dialog
       v-model="dialogVisible"
-      :title="isEdit ? '编辑用户' : '添加用户'"
+      :title="isEdit ? t('user.editUser') : t('user.addUser')"
       width="500px"
     >
       <el-form
@@ -101,26 +101,26 @@
         :rules="userRules"
         label-width="80px"
       >
-        <el-form-item label="用户名" prop="username">
-          <el-input v-model="userForm.username" placeholder="请输入用户名" />
+        <el-form-item :label="t('user.username')" prop="username">
+          <el-input v-model="userForm.username" :placeholder="t('user.enterUsername')" />
         </el-form-item>
-        <el-form-item label="邮箱" prop="email">
-          <el-input v-model="userForm.email" placeholder="请输入邮箱" type="email" />
+        <el-form-item :label="t('user.email')" prop="email">
+          <el-input v-model="userForm.email" :placeholder="t('user.enterEmail')" type="email" />
         </el-form-item>
-        <el-form-item label="密码" prop="password" v-if="!isEdit">
-          <el-input v-model="userForm.password" placeholder="请输入密码" type="password" />
+        <el-form-item :label="t('user.password')" prop="password" v-if="!isEdit">
+          <el-input v-model="userForm.password" :placeholder="t('user.enterPassword')" type="password" />
         </el-form-item>
-        <el-form-item label="状态" prop="status">
+        <el-form-item :label="t('user.status')" prop="status">
           <el-radio-group v-model="userForm.status">
-            <el-radio label="active">启用</el-radio>
-            <el-radio label="inactive">冻结</el-radio>
+            <el-radio label="active">{{ t('user.active') }}</el-radio>
+            <el-radio label="inactive">{{ t('user.inactive') }}</el-radio>
           </el-radio-group>
         </el-form-item>
       </el-form>
       <template #footer>
         <span class="dialog-footer">
-          <el-button @click="dialogVisible = false">取消</el-button>
-          <el-button type="primary" @click="handleSaveUser">保存</el-button>
+          <el-button @click="dialogVisible = false">{{ t('user.cancel') }}</el-button>
+          <el-button type="primary" @click="handleSaveUser">{{ t('user.save') }}</el-button>
         </span>
       </template>
     </el-dialog>
@@ -129,8 +129,11 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { Plus, Delete, Download, Search, Edit } from '@element-plus/icons-vue'
+
+const { t } = useI18n()
 
 // 模拟用户数据
 const generateMockUsers = () => {
@@ -168,16 +171,16 @@ const userFormRef = ref(null)
 // 表单验证规则
 const userRules = ref({
   username: [
-    { required: true, message: '请输入用户名', trigger: 'blur' },
-    { min: 3, max: 20, message: '用户名长度在3-20之间', trigger: 'blur' }
+    { required: true, message: t('user.usernameRequired'), trigger: 'blur' },
+    { min: 3, max: 20, message: t('user.usernameLength'), trigger: 'blur' }
   ],
   email: [
-    { required: true, message: '请输入邮箱', trigger: 'blur' },
-    { type: 'email', message: '请输入正确的邮箱格式', trigger: 'blur' }
+    { required: true, message: t('user.emailRequired'), trigger: 'blur' },
+    { type: 'email', message: t('user.emailInvalid'), trigger: 'blur' }
   ],
   password: [
-    { required: true, message: '请输入密码', trigger: 'blur' },
-    { min: 6, message: '密码长度不能小于6位', trigger: 'blur' }
+    { required: true, message: t('user.passwordRequired'), trigger: 'blur' },
+    { min: 6, message: t('user.passwordLength'), trigger: 'blur' }
   ]
 })
 
@@ -257,7 +260,7 @@ const handleSaveUser = async () => {
       const index = users.value.findIndex(u => u.id === userForm.value.id)
       if (index !== -1) {
         users.value[index] = { ...userForm.value }
-        ElMessage.success('用户编辑成功')
+        ElMessage.success(t('user.editSuccess'))
       }
     } else {
       // 添加用户
@@ -267,7 +270,7 @@ const handleSaveUser = async () => {
         createdAt: new Date().toISOString().split('T')[0]
       }
       users.value.push(newUser)
-      ElMessage.success('用户添加成功')
+      ElMessage.success(t('user.addSuccess'))
     }
     
     dialogVisible.value = false
@@ -279,13 +282,13 @@ const handleSaveUser = async () => {
 
 // 删除用户
 const handleDeleteUser = (id) => {
-  ElMessageBox.confirm('确定要删除该用户吗？', '删除确认', {
-    confirmButtonText: '确定',
-    cancelButtonText: '取消',
+  ElMessageBox.confirm(t('user.deleteConfirm'), t('user.deleteTitle'), {
+    confirmButtonText: t('user.confirm'),
+    cancelButtonText: t('user.cancel'),
     type: 'warning'
   }).then(() => {
     users.value = users.value.filter(user => user.id !== id)
-    ElMessage.success('用户删除成功')
+    ElMessage.success(t('user.deleteSuccess'))
   }).catch(() => {
     // 取消删除
   })
@@ -295,14 +298,14 @@ const handleDeleteUser = (id) => {
 const handleBatchDelete = () => {
   if (selectedUserIds.value.length === 0) return
   
-  ElMessageBox.confirm(`确定要删除选中的${selectedUserIds.value.length}个用户吗？`, '批量删除确认', {
-    confirmButtonText: '确定',
-    cancelButtonText: '取消',
+  ElMessageBox.confirm(t('user.batchDeleteConfirm', { count: selectedUserIds.value.length }), t('user.deleteTitle'), {
+    confirmButtonText: t('user.confirm'),
+    cancelButtonText: t('user.cancel'),
     type: 'warning'
   }).then(() => {
     users.value = users.value.filter(user => !selectedUserIds.value.includes(user.id))
     selectedUserIds.value = []
-    ElMessage.success('批量删除成功')
+    ElMessage.success(t('user.batchDeleteSuccess'))
   }).catch(() => {
     // 取消删除
   })
@@ -313,14 +316,14 @@ const handleToggleStatus = (id, newStatus) => {
   const user = users.value.find(u => u.id === id)
   if (user) {
     user.status = newStatus
-    ElMessage.success(`用户已${newStatus === 'active' ? '启用' : '冻结'}`)
+    ElMessage.success(t('user.statusChanged', { status: newStatus === 'active' ? t('user.active') : t('user.inactive') }))
   }
 }
 
 // 导出Excel
 const handleExportExcel = () => {
   // 这里只添加按钮，不实现具体功能
-  ElMessage.info('Excel导出功能开发中')
+  ElMessage.info(t('user.exporting'))
 }
 </script>
 

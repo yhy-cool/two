@@ -17,6 +17,12 @@ onMounted(() => {
 watch(() => globalStore.language, (newLang) => {
   locale.value = newLang
 })
+
+// 监听主题变化
+watch(() => globalStore.theme, (newTheme) => {
+  // 应用主题到文档
+  document.documentElement.setAttribute('data-theme', newTheme)
+})
 </script>
 
 <template>

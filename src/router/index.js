@@ -3,6 +3,8 @@ import { createRouter, createWebHistory } from 'vue-router'
 import Login from '../views/login/index.vue'
 import Layout from '../layout/index.vue'
 import UserList from '../views/user/UserList.vue'
+import Dashboard from '../views/dashboard/index.vue'
+import Profile from '../views/profile/index.vue'
 
 const publicRoutes = [
   {
@@ -18,6 +20,18 @@ const publicRoutes = [
         path: 'user',
         name: 'user',
         component: UserList,
+        meta: { requiresAuth: true }
+      },
+      {
+        path: 'dashboard',
+        name: 'dashboard',
+        component: Dashboard,
+        meta: { requiresAuth: true }
+      },
+      {
+        path: 'profile',
+        name: 'profile',
+        component: Profile,
         meta: { requiresAuth: true }
       }
     ]

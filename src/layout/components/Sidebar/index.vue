@@ -6,27 +6,38 @@
       background-color="#303133"
       text-color="#fff"
       active-text-color="#409EFF"
+      router
     >
-      <el-menu-item index="1">
+      <el-menu-item index="/">
         <el-icon><i class="el-icon-s-home"></i></el-icon>
         <span>首页</span>
       </el-menu-item>
-      <el-menu-item index="2">
-        <el-icon><i class="el-icon-document"></i></el-icon>
-        <span>文档</span>
+      <el-menu-item index="/user">
+        <el-icon><i class="el-icon-user"></i></el-icon>
+        <span>用户管理</span>
       </el-menu-item>
-      <el-menu-item index="3">
+      <el-menu-item index="/dashboard">
+        <el-icon><i class="el-icon-data-analysis"></i></el-icon>
+        <span>数据可视化</span>
+      </el-menu-item>
+      <el-menu-item index="/setting">
         <el-icon><i class="el-icon-setting"></i></el-icon>
         <span>设置</span>
+      </el-menu-item>
+      <el-menu-item index="/profile">
+        <el-icon><i class="el-icon-user"></i></el-icon>
+        <span>我的</span>
       </el-menu-item>
     </el-menu>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
+import { useRoute } from 'vue-router'
 
-const activeIndex = ref('1')
+const route = useRoute()
+const activeIndex = computed(() => route.path)
 </script>
 
 <style scoped>
