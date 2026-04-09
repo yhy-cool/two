@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 import Login from '../views/login/index.vue'
 import Layout from '../layout/index.vue'
+import UserList from '../views/user/UserList.vue'
 
 const publicRoutes = [
   {
@@ -11,7 +12,12 @@ const publicRoutes = [
     children: [
       {
         path: '',
-        name: 'home',
+        redirect: '/user'
+      },
+      {
+        path: 'user',
+        name: 'user',
+        component: UserList,
         meta: { requiresAuth: true }
       }
     ]
