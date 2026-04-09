@@ -12,17 +12,24 @@
         <el-icon><i class="el-icon-s-home"></i></el-icon>
         <span>首页</span>
       </el-menu-item>
-      <el-menu-item index="/user">
-        <el-icon><i class="el-icon-user"></i></el-icon>
-        <span>用户管理</span>
-      </el-menu-item>
+      <el-sub-menu index="/users">
+        <template #title>
+          <el-icon><i class="el-icon-user"></i></el-icon>
+          <span>用户管理</span>
+        </template>
+        <el-menu-item index="/users/list">
+          <span>用户列表</span>
+        </el-menu-item>
+        <el-menu-item index="/users/roles">
+          <span>角色列表</span>
+        </el-menu-item>
+        <el-menu-item index="/users/permissions">
+          <span>权限列表</span>
+        </el-menu-item>
+      </el-sub-menu>
       <el-menu-item index="/dashboard">
         <el-icon><i class="el-icon-data-analysis"></i></el-icon>
         <span>数据可视化</span>
-      </el-menu-item>
-      <el-menu-item index="/setting">
-        <el-icon><i class="el-icon-setting"></i></el-icon>
-        <span>设置</span>
       </el-menu-item>
       <el-menu-item index="/profile">
         <el-icon><i class="el-icon-user"></i></el-icon>

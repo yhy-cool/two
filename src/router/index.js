@@ -2,7 +2,9 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 import Login from '../views/login/index.vue'
 import Layout from '../layout/index.vue'
-import UserList from '../views/user/UserList.vue'
+import UserList from '../views/users/UserList.vue'
+import RoleList from '../views/users/RoleList.vue'
+import PermissionList from '../views/users/PermissionList.vue'
 import Dashboard from '../views/dashboard/index.vue'
 import Profile from '../views/profile/index.vue'
 
@@ -14,12 +16,24 @@ const publicRoutes = [
     children: [
       {
         path: '',
-        redirect: '/user'
+        redirect: '/users/list'
       },
       {
-        path: 'user',
-        name: 'user',
+        path: 'users/list',
+        name: 'userList',
         component: UserList,
+        meta: { requiresAuth: true }
+      },
+      {
+        path: 'users/roles',
+        name: 'roleList',
+        component: RoleList,
+        meta: { requiresAuth: true }
+      },
+      {
+        path: 'users/permissions',
+        name: 'permissionList',
+        component: PermissionList,
         meta: { requiresAuth: true }
       },
       {
