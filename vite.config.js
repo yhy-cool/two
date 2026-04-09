@@ -75,6 +75,11 @@ export default defineConfig(({ mode }) => {
           drop_debugger: true
         }
       }
+    },
+    resolve: {
+      alias: {
+        '@': path.resolve(__dirname, 'src')
+      }
     }
   }
 })
