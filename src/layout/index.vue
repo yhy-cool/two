@@ -1,10 +1,16 @@
 <template>
   <div class="common-layout">
-    <el-container>
-      <el-header>Header</el-header>
+    <el-container style="height: 100vh;">
+      <el-aside width="200px" style="background-color: #303133; color: white;">
+        <Sidebar />
+      </el-aside>
       <el-container>
-        <el-aside width="200px">Aside</el-aside>
-        <el-main>Main</el-main>
+        <el-header height="60px" style="background-color: #409EFF; color: white;">
+          <Navbar />
+        </el-header>
+        <el-main style="background-color: #f0f2f5;">
+          <AppMain />
+        </el-main>
       </el-container>
     </el-container>
   </div>
@@ -13,10 +19,13 @@
 <script setup>
 import Navbar from './components/Navbar.vue'
 import AppMain from './components/AppMain.vue'
-import Sidebar from './components/Sidebar.vue'
+import Sidebar from './components/Sidebar/index.vue'
 </script>
 
 <style scoped>
-
+.common-layout {
+  width: 100%;
+  height: 100vh;
+}
 </style>
  

@@ -2,11 +2,18 @@ import service from './axios'
 
 // 示例接口
 export const login = (data) => {
-  return service({
-    url: '/login',
-    method: 'post',
-    data
+  // 模拟登录成功，返回假的 token
+  return new Promise(resolve => {
+    setTimeout(() => {
+      resolve({ token: 'fake-token-123456' })
+    }, 500)
   })
+  // 真实接口调用
+  // return service({
+  //   url: '/login',
+  //   method: 'post',
+  //   data
+  // })
 }
 
 export const getUserInfo = () => {

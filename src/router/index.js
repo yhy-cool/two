@@ -1,12 +1,20 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
 import Login from '../views/login/index.vue'
+import Layout from '../layout/index.vue'
 
 const publicRoutes = [
   {
     path: '/',
-    redirect: '/login',
-    meta: { requiresAuth: true }
+    component: Layout,
+    meta: { requiresAuth: true },
+    children: [
+      {
+        path: '',
+        name: 'home',
+        meta: { requiresAuth: true }
+      }
+    ]
   },
   {
     path: '/login',
