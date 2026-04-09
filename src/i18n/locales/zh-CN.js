@@ -55,7 +55,13 @@ export default {
     batchDeleteConfirm: '确定要删除选中的{count}个用户吗？',
     batchDeleteSuccess: '批量删除成功',
     statusChanged: '用户已{status}',
-    exporting: 'Excel导出功能开发中'
+    importing: 'Excel导入功能开发中',
+    importExcel: '导入Excel',
+    exportSuccess: '导出成功',
+    exportFailed: '导出失败',
+    importSuccess: '导入成功，共{count}条数据',
+    importFailed: '导入失败',
+    importNoData: '没有可导入的数据'
   },
   profile: {
     title: '个人信息',

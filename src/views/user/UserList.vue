@@ -17,6 +17,18 @@
               <el-icon><Download /></el-icon>
               {{ t('user.exportExcel') }}
             </el-button>
+            <el-upload
+              class="upload-btn"
+              :show-file-list="false"
+              :auto-upload="false"
+              :on-change="handleFileChange"
+              accept=".xlsx,.xls"
+            >
+              <el-button type="success">
+                <el-icon><Upload /></el-icon>
+                {{ t('user.importExcel') }}
+              </el-button>
+            </el-upload>
           </div>
         </div>
       </template>
@@ -39,7 +51,7 @@
       
       <el-table
         v-loading="loading"
-        :data="filteredUsers"
+        :data="paginatedUsers"
         style="width: 100%"
         @selection-change="handleSelectionChange"
       >
@@ -131,7 +143,8 @@
 import { ref, computed, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { Plus, Delete, Download, Search, Edit } from '@element-plus/icons-vue'
+import { Plus, Delete, Download, Search, Edit, Upload } from '@element-plus/icons-vue'
+import { importExcel, exportExcel } from '@/utils/excel'
 
 const { t } = useI18n()
 
@@ -322,8 +335,68 @@ const handleToggleStatus = (id, newStatus) => {
 
 // 导出Excel
 const handleExportExcel = () => {
-  // 这里只添加按钮，不实现具体功能
-  ElMessage.info(t('user.exporting'))
+  try {
+    const headers = [
+      { key: 'id', title: t('user.id') },
+      { key: 'username', title: t('user.username') },
+      { key: 'email', title: t('user.email') },
+      { key: 'status', title: t('user.status') },
+      { key: 'createdAt', title: t('user.createdAt') }
+    ]
+    
+    // 转换状态为中文
+    const exportData = users.value.map(user => ({
+      ...user,
+      status: user.status === 'active' ? t('user.active') : t('user.inactive')
+    }))
+    
+    exportExcel(exportData, 'users.xlsx', headers)
+    ElMessage.success(t('user.exportSuccess'))
+  } catch (error) {
+    console.error('导出失败:', error)
+    ElMessage.error(t('user.exportFailed'))
+  }
+}
+
+// 处理文件上传
+const handleFileChange = async (file) => {
+  try {
+    const importedData = await importExcel(file.raw)
+    
+    // 处理导入的数据
+    const newUsers = importedData.map(item => {
+      // 转换状态为英文
+      let status = item.status
+      if (typeof status === 'string') {
+        status = status.toLowerCase()
+        if (status.includes('active') || status.includes('启用') || status.includes('激活')) {
+          status = 'active'
+        } else {
+          status = 'inactive'
+        }
+      } else {
+        status = 'active'
+      }
+      
+      return {
+        id: Math.max(...users.value.map(u => u.id), 0) + 1,
+        username: item.username || item[t('user.username')] || '',
+        email: item.email || item[t('user.email')] || '',
+        status: status,
+        createdAt: item.createdAt || item[t('user.createdAt')] || new Date().toISOString().split('T')[0]
+      }
+    }).filter(user => user.username && user.email)
+    
+    if (newUsers.length > 0) {
+      users.value = [...users.value, ...newUsers]
+      ElMessage.success(t('user.importSuccess', { count: newUsers.length }))
+    } else {
+      ElMessage.warning(t('user.importNoData'))
+    }
+  } catch (error) {
+    console.error('导入失败:', error)
+    ElMessage.error(t('user.importFailed'))
+  }
 }
 </script>
 
