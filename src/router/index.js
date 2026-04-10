@@ -7,6 +7,7 @@ import RoleList from '../views/users/RoleList.vue'
 import PermissionList from '../views/users/PermissionList.vue'
 import Dashboard from '../views/dashboard/index.vue'
 import Profile from '../views/profile/index.vue'
+import ExcelDemo from '../views/excel/ExcelDemo.vue'
 
 const publicRoutes = [
   {
@@ -46,6 +47,12 @@ const publicRoutes = [
         path: 'profile',
         name: 'profile',
         component: Profile,
+        meta: { requiresAuth: true }
+      },
+      {
+        path: 'excel',
+        name: 'excelDemo',
+        component: ExcelDemo,
         meta: { requiresAuth: true }
       }
     ]

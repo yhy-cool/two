@@ -13,6 +13,19 @@
               <el-icon><Delete /></el-icon>
               {{ t('user.batchDelete') }}
             </el-button>
+            <el-upload
+              class="upload-demo"
+              action=""
+              :auto-upload="false"
+              :on-change="handleFileChange"
+              :show-file-list="false"
+              accept=".xlsx,.xls"
+            >
+              <el-button type="success">
+                <el-icon><Upload /></el-icon>
+                {{ t('user.importExcel') }}
+              </el-button>
+            </el-upload>
             <el-button type="info" @click="handleExportExcel">
               <el-icon><Download /></el-icon>
               {{ t('user.exportExcel') }}
@@ -39,7 +52,7 @@
       
       <el-table
         v-loading="loading"
-        :data="filteredUsers"
+        :data="paginatedUsers"
         style="width: 100%"
         @selection-change="handleSelectionChange"
       >
@@ -149,8 +162,9 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { ElMessage, ElMessageBox } from 'element-plus'
-import { Plus, Delete, Download, Search, Edit } from '@element-plus/icons-vue'
+import { ElMessage, ElMessageBox, ElUpload } from 'element-plus'
+import { Plus, Delete, Download, Search, Edit, Upload } from '@element-plus/icons-vue'
+import { importExcel, exportExcel } from '@/utils/excel'
 
 const { t } = useI18n()
 
@@ -181,6 +195,7 @@ const pageSize = ref(10)
 const selectedUserIds = ref([])
 const dialogVisible = ref(false)
 const isEdit = ref(false)
+const file = ref(null)
 const userForm = ref({
   id: '',
   username: '',
@@ -218,11 +233,11 @@ const canEditUser = (user) => {
   
   // 经理可以编辑自己和员工
   if (currentUser.role === 'manager') {
-    return user.id === currentUser.id || user.role === 'employee'
+    return user.id === currentUser.id || user.role === 'employee' || user.role === 'user'
   }
   
-  // 员工只能编辑自己
-  if (currentUser.role === 'employee') {
+  // 员工和普通用户只能编辑自己
+  if (currentUser.role === 'employee' || currentUser.role === 'user') {
     return user.id === currentUser.id
   }
   
@@ -420,10 +435,73 @@ const handleToggleStatus = (id, newStatus) => {
   }
 }
 
+// 处理文件上传
+const handleFileChange = (fileObj) => {
+  file.value = fileObj.raw
+  handleImportExcel()
+}
+
+// 导入Excel
+const handleImportExcel = async () => {
+  if (!file.value) {
+    return
+  }
+  
+  try {
+    loading.value = true
+    const data = await importExcel(file.value)
+    
+    if (data.length === 0) {
+      ElMessage.warning(t('user.importNoData'))
+      return
+    }
+    
+    // 处理导入的数据
+    const newUsers = data.map(item => ({
+      id: users.value.length + 1 + data.indexOf(item),
+      username: item.username || item.用户名 || '',
+      name: item.name || item.姓名 || '',
+      email: item.email || item.邮箱 || '',
+      role: item.role || item.角色 || 'employee',
+      status: item.status || item.状态 || 'active',
+      createdAt: new Date().toISOString().split('T')[0]
+    }))
+    
+    users.value = [...users.value, ...newUsers]
+    ElMessage.success(t('user.importSuccess', { count: newUsers.length }))
+  } catch (error) {
+    ElMessage.error(t('user.importFailed') + ': ' + error.message)
+  } finally {
+    loading.value = false
+    file.value = null
+  }
+}
+
 // 导出Excel
 const handleExportExcel = () => {
-  // 这里只添加按钮，不实现具体功能
-  ElMessage.info(t('user.exporting'))
+  try {
+    const headers = [
+      { key: 'id', title: 'ID' },
+      { key: 'username', title: '用户名' },
+      { key: 'name', title: '姓名' },
+      { key: 'email', title: '邮箱' },
+      { key: 'role', title: '角色' },
+      { key: 'status', title: '状态' },
+      { key: 'createdAt', title: '创建时间' }
+    ]
+    
+    // 转换角色和状态为中文
+    const exportData = users.value.map(user => ({
+      ...user,
+      role: getRoleName(user.role),
+      status: user.status === 'active' ? t('user.active') : t('user.inactive')
+    }))
+    
+    exportExcel(exportData, '用户数据.xlsx', headers)
+    ElMessage.success(t('user.exportSuccess'))
+  } catch (error) {
+    ElMessage.error(t('user.exportFailed') + ': ' + error.message)
+  }
 }
 </script>
 
