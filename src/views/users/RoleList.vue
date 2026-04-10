@@ -14,6 +14,7 @@
       </template>
       
       <el-table
+        ref="tableRef"
         v-loading="loading"
         :data="roles"
         style="width: 100%"
@@ -103,6 +104,7 @@ const roles = ref(generateMockRoles())
 const loading = ref(false)
 const dialogVisible = ref(false)
 const isEdit = ref(false)
+const tableRef = ref(null)
 const roleForm = ref({
   id: '',
   name: '',
@@ -132,10 +134,80 @@ const roleRules = ref({
   ]
 })
 
+// 初始化行拖拽排序
+const initRowDrag = () => {
+  // 动态引入SortableJS
+  if (typeof window.Sortable === 'undefined') {
+    const script = document.createElement('script')
+    script.src = 'https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js'
+    script.onload = () => {
+      setupRowSortable()
+    }
+    script.onerror = () => {
+      console.error('SortableJS加载失败')
+    }
+    document.body.appendChild(script)
+  } else {
+    setupRowSortable()
+  }
+}
+
+// 设置行拖拽Sortable
+const setupRowSortable = () => {
+  setTimeout(() => {
+    if (tableRef.value) {
+      const tableBody = tableRef.value.$el.querySelector('.el-table__body-wrapper tbody')
+      if (tableBody) {
+        try {
+          new window.Sortable(tableBody, {
+            animation: 150,
+            ghostClass: 'sortable-ghost',
+            chosenClass: 'sortable-chosen',
+            dragClass: 'sortable-drag',
+            onMove: function(evt) {
+              // 移除之前的高亮
+              const oldHighlight = tableBody.querySelector('.sortable-highlight')
+              if (oldHighlight) {
+                oldHighlight.classList.remove('sortable-highlight')
+              }
+              
+              // 给目标位置添加高亮
+              if (evt.related) {
+                evt.related.classList.add('sortable-highlight')
+              }
+            },
+            onEnd: function(evt) {
+              // 移除所有高亮
+              const highlights = tableBody.querySelectorAll('.sortable-highlight')
+              highlights.forEach(el => el.classList.remove('sortable-highlight'))
+              
+              // 更新数据顺序
+              const movedItem = roles.value.splice(evt.oldIndex, 1)[0]
+              roles.value.splice(evt.newIndex, 0, movedItem)
+              
+              // 强制表格重新渲染
+              tableRef.value.$forceUpdate()
+              
+              // 显示修改成功提示
+              ElMessage.success('修改成功')
+            }
+          })
+        } catch (error) {
+          console.error('初始化行拖拽排序失败:', error)
+        }
+      }
+    }
+  }, 300)
+}
+
 // 生命周期
 onMounted(() => {
   // 初始化数据
   roles.value = generateMockRoles()
+  // 按id从小到大排序
+  roles.value.sort((a, b) => a.id - b.id)
+  // 初始化行拖拽排序
+  initRowDrag()
 })
 
 // 添加角色
@@ -223,5 +295,25 @@ const handleDeleteRole = (id) => {
   display: flex;
   justify-content: flex-end;
   gap: 10px;
+}
+
+/* 拖拽样式 */
+:deep(.sortable-ghost) {
+  opacity: 0.6;
+  background: #f0f9ff;
+}
+
+:deep(.sortable-chosen) {
+  background: #e6f7ff;
+}
+
+:deep(.sortable-drag) {
+  opacity: 0.8;
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+}
+
+:deep(.sortable-highlight) {
+  background: #ffeaa7 !important;
+  transition: background 0.2s;
 }
 </style>

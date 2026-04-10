@@ -51,33 +51,29 @@
       </div>
       
       <el-table
+        ref="tableRef"
         v-loading="loading"
         :data="paginatedUsers"
         style="width: 100%"
         @selection-change="handleSelectionChange"
       >
         <el-table-column type="selection" width="55" />
-        <el-table-column prop="id" :label="t('user.id')" width="80" />
-        <el-table-column prop="username" :label="t('user.username')" />
-        <el-table-column prop="name" :label="t('user.name')" />
-        <el-table-column prop="email" :label="t('user.email')" />
-        <el-table-column prop="role" :label="t('user.role')" width="120">
-          <template #default="scope">
+        <el-table-column v-for="column in columns" :key="column.prop || column.type"
+          :prop="column.prop"
+          :label="column.label"
+          :width="column.width"
+        >
+          <template v-if="column.prop === 'role'" #default="scope">
             <el-tag :type="getRoleType(scope.row.role)">
               {{ getRoleName(scope.row.role) }}
             </el-tag>
           </template>
-        </el-table-column>
-        <el-table-column prop="status" :label="t('user.status')" width="100">
-          <template #default="scope">
+          <template v-else-if="column.prop === 'status'" #default="scope">
             <el-tag :type="scope.row.status === 'active' ? 'success' : 'danger'">
               {{ scope.row.status === 'active' ? t('user.active') : t('user.inactive') }}
             </el-tag>
           </template>
-        </el-table-column>
-        <el-table-column prop="createdAt" :label="t('user.createdAt')" width="180" />
-        <el-table-column :label="t('user.actions')" width="250">
-          <template #default="scope">
+          <template v-else-if="column.prop === 'actions'" #default="scope">
             <el-button size="small" @click="handleEditUser(scope.row)" v-if="canEditUser(scope.row)">
               <el-icon><Edit /></el-icon>
               {{ t('user.edit') }}
@@ -160,7 +156,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { ElMessage, ElMessageBox, ElUpload } from 'element-plus'
 import { Plus, Delete, Download, Search, Edit, Upload } from '@element-plus/icons-vue'
@@ -186,6 +182,18 @@ const generateMockUsers = () => {
   return users
 }
 
+// 表格列配置
+const columns = ref([
+  { prop: 'id', label: t('user.id'), width: '80' },
+  { prop: 'username', label: t('user.username') },
+  { prop: 'name', label: t('user.name') },
+  { prop: 'email', label: t('user.email') },
+  { prop: 'role', label: t('user.role'), width: '120' },
+  { prop: 'status', label: t('user.status'), width: '100' },
+  { prop: 'createdAt', label: t('user.createdAt'), width: '180' },
+  { prop: 'actions', label: t('user.actions'), width: '250' }
+])
+
 // 状态管理
 const users = ref(generateMockUsers())
 const searchQuery = ref('')
@@ -196,6 +204,7 @@ const selectedUserIds = ref([])
 const dialogVisible = ref(false)
 const isEdit = ref(false)
 const file = ref(null)
+const tableRef = ref(null)
 const userForm = ref({
   id: '',
   username: '',
@@ -278,14 +287,16 @@ const userRules = ref({
 
 // 过滤后的用户列表
 const filteredUsers = computed(() => {
-  if (!searchQuery.value) {
-    return users.value
+  let result = users.value
+  if (searchQuery.value) {
+    result = result.filter(user => 
+      user.username.includes(searchQuery.value) || 
+      user.name.includes(searchQuery.value) ||
+      user.email.includes(searchQuery.value)
+    )
   }
-  return users.value.filter(user => 
-    user.username.includes(searchQuery.value) || 
-    user.name.includes(searchQuery.value) ||
-    user.email.includes(searchQuery.value)
-  )
+  // 按id从小到大排序
+  return result.sort((a, b) => a.id - b.id)
 })
 
 // 分页后的用户列表
@@ -315,10 +326,82 @@ const getRoleType = (role) => {
   return typeMap[role] || 'info'
 }
 
+// 初始化行拖拽排序
+const initRowDrag = () => {
+  // 动态引入SortableJS
+  if (typeof window.Sortable === 'undefined') {
+    const script = document.createElement('script')
+    script.src = 'https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js'
+    script.onload = () => {
+      setupRowSortable()
+    }
+    script.onerror = () => {
+      console.error('SortableJS加载失败')
+    }
+    document.body.appendChild(script)
+  } else {
+    setupRowSortable()
+  }
+}
+
+// 设置行拖拽Sortable
+const setupRowSortable = () => {
+  setTimeout(() => {
+    if (tableRef.value) {
+      const tableBody = tableRef.value.$el.querySelector('.el-table__body-wrapper tbody')
+      if (tableBody) {
+        try {
+          new window.Sortable(tableBody, {
+            animation: 150,
+            ghostClass: 'sortable-ghost',
+            chosenClass: 'sortable-chosen',
+            dragClass: 'sortable-drag',
+            // 确保拖拽时显示正确的内容
+            ghostText: function(evt) {
+              return evt.item.textContent.trim()
+            },
+            onMove: function(evt) {
+              // 移除之前的高亮
+              const oldHighlight = tableBody.querySelector('.sortable-highlight')
+              if (oldHighlight) {
+                oldHighlight.classList.remove('sortable-highlight')
+              }
+              
+              // 给目标位置添加高亮
+              if (evt.related) {
+                evt.related.classList.add('sortable-highlight')
+              }
+            },
+            onEnd: function(evt) {
+              // 移除所有高亮
+              const highlights = tableBody.querySelectorAll('.sortable-highlight')
+              highlights.forEach(el => el.classList.remove('sortable-highlight'))
+              
+              // 更新数据顺序
+              const movedItem = users.value.splice(evt.oldIndex, 1)[0]
+              users.value.splice(evt.newIndex, 0, movedItem)
+              
+              // 强制表格重新渲染
+              tableRef.value.$forceUpdate()
+              
+              // 显示修改成功提示
+              ElMessage.success('修改成功')
+            }
+          })
+        } catch (error) {
+          console.error('初始化行拖拽排序失败:', error)
+        }
+      }
+    }
+  }, 300)
+}
+
 // 生命周期
 onMounted(() => {
   // 初始化数据
   users.value = generateMockUsers()
+  // 初始化行拖拽排序
+  initRowDrag()
 })
 
 // 搜索
@@ -535,5 +618,27 @@ const handleExportExcel = () => {
   display: flex;
   justify-content: flex-end;
   gap: 10px;
+}
+
+/* 行拖拽样式 */
+:deep(.sortable-ghost) {
+  opacity: 0.5;
+  background: #f0f0f0;
+}
+
+:deep(.sortable-chosen) {
+  background: #ecf5ff !important;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+:deep(.sortable-drag) {
+  opacity: 0.8;
+  background: #ecf5ff !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+:deep(.sortable-highlight) {
+  background: #ffeaa7 !important;
+  transition: background 0.2s;
 }
 </style>

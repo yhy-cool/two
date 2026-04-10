@@ -8,6 +8,8 @@ import PermissionList from '../views/users/PermissionList.vue'
 import Dashboard from '../views/dashboard/index.vue'
 import Profile from '../views/profile/index.vue'
 import ExcelDemo from '../views/excel/ExcelDemo.vue'
+import DragListPage from '../views/DragListPage.vue'
+import DraggableTableDemo from '../views/DraggableTableDemo.vue'
 
 const publicRoutes = [
   {
@@ -53,6 +55,18 @@ const publicRoutes = [
         path: 'excel',
         name: 'excelDemo',
         component: ExcelDemo,
+        meta: { requiresAuth: true }
+      },
+      {
+        path: 'drag-list',
+        name: 'dragList',
+        component: DragListPage,
+        meta: { requiresAuth: true }
+      },
+      {
+        path: 'draggable-table',
+        name: 'draggableTable',
+        component: DraggableTableDemo,
         meta: { requiresAuth: true }
       }
     ]
