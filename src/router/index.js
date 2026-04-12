@@ -10,6 +10,8 @@ import Profile from '../views/profile/index.vue'
 import ExcelDemo from '../views/excel/ExcelDemo.vue'
 import DragListPage from '../views/DragListPage.vue'
 import DraggableTableDemo from '../views/DraggableTableDemo.vue'
+import ArticleList from '../views/article/ArticleList.vue'
+import ArticleCreate from '../views/article/ArticleCreate.vue'
 
 const publicRoutes = [
   {
@@ -67,6 +69,18 @@ const publicRoutes = [
         path: 'draggable-table',
         name: 'draggableTable',
         component: DraggableTableDemo,
+        meta: { requiresAuth: true }
+      },
+      {
+        path: 'article/list',
+        name: 'articleList',
+        component: ArticleList,
+        meta: { requiresAuth: true }
+      },
+      {
+        path: 'article/create',
+        name: 'articleCreate',
+        component: ArticleCreate,
         meta: { requiresAuth: true }
       }
     ]

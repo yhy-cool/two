@@ -36,6 +36,18 @@
         <el-icon><i class="el-icon-user"></i></el-icon>
         <span>{{ t('sidebar.profile') }}</span>
       </el-menu-item>
+      <el-sub-menu index="/article">
+        <template #title>
+          <el-icon><i class="el-icon-document"></i></el-icon>
+          <span>文章</span>
+        </template>
+        <el-menu-item index="/article/list">
+          <span>文章列表</span>
+        </el-menu-item>
+        <el-menu-item index="/article/create">
+          <span>创建文章</span>
+        </el-menu-item>
+      </el-sub-menu>
     </el-menu>
   </div>
 </template>

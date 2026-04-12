@@ -126,11 +126,31 @@ export default {
     roleList: '角色列表',
     permissionList: '权限列表',
     dashboard: '数据可视化',
-    profile: '我的'
+    profile: '我的',
+    articleManagement: '文章管理',
+    articleList: '文章列表',
+    articleCreate: '添加文章'
   },
   navbar: {
     title: '后台管理系统',
     profile: '个人中心',
     logout: '退出登录'
+  },
+  article: {
+    list: {
+      title: '文章列表',
+      create: '添加文章',
+      createdAt: '创建时间',
+      actions: '操作',
+      edit: '编辑',
+      delete: '删除'
+    },
+    create: {
+      title: '添加文章',
+      titlePlaceholder: '请输入文章标题',
+      content: '文章内容',
+      submit: '提交',
+      cancel: '取消'
+    }
   }
 }
