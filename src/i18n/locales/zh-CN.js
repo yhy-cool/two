@@ -114,7 +114,10 @@ export default {
   common: {
     language: '语言',
     chinese: '中文',
-    english: 'English'
+    english: 'English',
+    theme: '主题',
+    dark: '黑夜模式',
+    light: '白天模式'
   },
   sidebar: {
     home: '首页',

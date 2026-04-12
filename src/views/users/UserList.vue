@@ -622,7 +622,6 @@ const handleExportExcel = () => {
   gap: 10px;
 }
 
-<<<<<<< HEAD
 /* 确保卡片和表格响应主题切换 */
 :deep(.el-card) {
   background-color: var(--card-bg) !important;
@@ -678,7 +677,8 @@ const handleExportExcel = () => {
   background-color: var(--primary-color) !important;
   border-color: var(--primary-color) !important;
   color: white !important;
-=======
+}
+
 /* 行拖拽样式 */
 :deep(.sortable-ghost) {
   opacity: 0.5;
@@ -699,6 +699,5 @@ const handleExportExcel = () => {
 :deep(.sortable-highlight) {
   background: #ffeaa7 !important;
   transition: background 0.2s;
->>>>>>> 1b530287610d5542af690559257e22cf06392cd0
 }
 </style>

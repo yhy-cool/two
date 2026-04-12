@@ -10,7 +10,6 @@
       :collapse-transition="false"
     >
       <el-menu-item index="/">
-<<<<<<< HEAD
         <el-icon><i class="el-icon-s-home"></i></el-icon>
         <span>{{ t('sidebar.home') }}</span>
       </el-menu-item>
@@ -36,36 +35,6 @@
       <el-menu-item index="/profile">
         <el-icon><i class="el-icon-user"></i></el-icon>
         <span>{{ t('sidebar.profile') }}</span>
-=======
-        <el-icon><svg-icon name="dashboard" /></el-icon>
-        <span>首页</span>
-      </el-menu-item>
-      <el-sub-menu index="/users">
-        <template #title>
-          <el-icon><svg-icon name="personnel" /></el-icon>
-          <span>用户管理</span>
-        </template>
-        <el-menu-item index="/users/list">
-          <el-icon><svg-icon name="personnel-info" /></el-icon>
-          <span>用户列表</span>
-        </el-menu-item>
-        <el-menu-item index="/users/roles">
-          <el-icon><svg-icon name="role" /></el-icon>
-          <span>角色列表</span>
-        </el-menu-item>
-        <el-menu-item index="/users/permissions">
-          <el-icon><svg-icon name="permission" /></el-icon>
-          <span>权限列表</span>
-        </el-menu-item>
-      </el-sub-menu>
-      <el-menu-item index="/dashboard">
-        <el-icon><svg-icon name="table" /></el-icon>
-        <span>数据可视化</span>
-      </el-menu-item>
-      <el-menu-item index="/profile">
-        <el-icon><svg-icon name="user" /></el-icon>
-        <span>个人中心</span>
->>>>>>> 1b530287610d5542af690559257e22cf06392cd0
       </el-menu-item>
     </el-menu>
   </div>
@@ -74,12 +43,9 @@
 <script setup>
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
-<<<<<<< HEAD
 import { useI18n } from 'vue-i18n'
 import { useGlobalStore } from '@/store'
-=======
 import SvgIcon from '@/components/SvgIcon/index.vue'
->>>>>>> 1b530287610d5542af690559257e22cf06392cd0
 
 const route = useRoute()
 const { t } = useI18n()

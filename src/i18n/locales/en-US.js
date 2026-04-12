@@ -109,7 +109,10 @@ export default {
   common: {
     language: 'Language',
     chinese: '中文',
-    english: 'English'
+    english: 'English',
+    theme: 'Theme',
+    dark: 'Dark Mode',
+    light: 'Light Mode'
   },
   sidebar: {
     home: 'Home',

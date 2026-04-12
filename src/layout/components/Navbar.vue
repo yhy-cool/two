@@ -1,26 +1,23 @@
 <template>
   <div class="navbar">
     <div class="navbar-left">
-<<<<<<< HEAD
-      <span class="logo">{{ t('navbar.title') }}</span>
-=======
       <div class="logo">
-        <el-icon class="logo-icon"><svg-icon name="dashboard" /></el-icon>
-        <span class="logo-text">后台管理系统</span>
+        <el-icon class="logo-icon"><i class="el-icon-s-home"></i></el-icon>
+        <span class="logo-text">{{ t('navbar.title') }}</span>
       </div>
->>>>>>> 1b530287610d5542af690559257e22cf06392cd0
     </div>
     <div class="navbar-right">
       <div class="controls">
-        <el-tooltip content="切换语言" placement="bottom">
+        <el-tooltip :content="t('common.language')" placement="bottom">
           <div class="control-item language-switch" @click="switchLanguage">
-            <el-icon><svg-icon name="language" /></el-icon>
+            <el-icon><i class="el-icon-s-finance"></i></el-icon>
             <span>{{ languageText }}</span>
           </div>
         </el-tooltip>
-        <el-tooltip content="切换主题" placement="bottom">
+        <el-tooltip :content="t('common.theme')" placement="bottom">
           <div class="control-item theme-switch" @click="switchTheme">
-            <el-icon><svg-icon name="change-theme" /></el-icon>
+            <el-icon><i class="el-icon-moon"></i></el-icon>
+            <span>{{ themeText }}</span>
           </div>
         </el-tooltip>
       </div>
@@ -28,23 +25,12 @@
         <div class="user">
           <el-avatar :size="36" :src="userAvatar" />
           <span class="user-name">{{ userName || '管理员' }}</span>
-          <el-icon class="dropdown-icon"><arrow-down /></el-icon>
+          <el-icon class="dropdown-icon"><ArrowDown /></el-icon>
         </div>
         <template #dropdown>
           <el-dropdown-menu>
-<<<<<<< HEAD
             <el-dropdown-item @click="navigateToProfile">{{ t('navbar.profile') }}</el-dropdown-item>
             <el-dropdown-item @click="handleLogout">{{ t('navbar.logout') }}</el-dropdown-item>
-=======
-            <el-dropdown-item @click="navigateToProfile">
-              <el-icon><svg-icon name="user" /></el-icon>
-              <span>个人中心</span>
-            </el-dropdown-item>
-            <el-dropdown-item divided @click="handleLogout">
-              <el-icon><svg-icon name="exit-fullscreen" /></el-icon>
-              <span>退出登录</span>
-            </el-dropdown-item>
->>>>>>> 1b530287610d5542af690559257e22cf06392cd0
           </el-dropdown-menu>
         </template>
       </el-dropdown>
@@ -68,6 +54,10 @@ const userName = ref('')
 
 const languageText = computed(() => {
   return globalStore.language === 'zh-CN' ? t('common.english') : t('common.chinese')
+})
+
+const themeText = computed(() => {
+  return globalStore.theme === 'light' ? t('common.dark') : t('common.light')
 })
 
 const userAvatar = ref('https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png')
@@ -110,16 +100,10 @@ onMounted(() => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-<<<<<<< HEAD
-  padding: 0 20px;
+  padding: 0 24px;
   background-color: var(--navbar-bg);
   color: var(--navbar-text);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-=======
-  padding: 0 24px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  background-color: #ffffff;
->>>>>>> 1b530287610d5542af690559257e22cf06392cd0
 }
 
 .logo {
@@ -141,13 +125,8 @@ onMounted(() => {
 
 .logo-text {
   font-size: 18px;
-<<<<<<< HEAD
-  font-weight: bold;
-  color: var(--navbar-text);
-=======
   font-weight: 600;
-  color: #303133;
->>>>>>> 1b530287610d5542af690559257e22cf06392cd0
+  color: var(--navbar-text);
 }
 
 .navbar-right {
@@ -166,35 +145,47 @@ onMounted(() => {
   cursor: pointer;
   display: flex;
   align-items: center;
-<<<<<<< HEAD
-  gap: 5px;
-  color: var(--navbar-text);
-  transition: color 0.3s ease;
-}
-
-.language-switch:hover, .theme-switch:hover {
-  color: var(--primary-color);
-=======
   gap: 6px;
-  color: #606266;
+  color: var(--navbar-text);
   padding: 8px 12px;
   border-radius: 8px;
   transition: all 0.3s ease;
 }
 
 .control-item:hover {
-  background-color: #f5f7fa;
-  color: #409EFF;
->>>>>>> 1b530287610d5542af690559257e22cf06392cd0
+  background-color: var(--hover-color);
+  color: var(--primary-color);
 }
 
 .user {
   cursor: pointer;
   display: flex;
   align-items: center;
-<<<<<<< HEAD
-  gap: 8px;
+  gap: 12px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
   color: var(--navbar-text);
+}
+
+.user:hover {
+  background-color: var(--hover-color);
+}
+
+.user-name {
+  font-size: 14px;
+  color: var(--navbar-text);
+  font-weight: 500;
+}
+
+.dropdown-icon {
+  font-size: 12px;
+  color: var(--navbar-text);
+  transition: transform 0.3s ease;
+}
+
+.user:hover .dropdown-icon {
+  transform: rotate(180deg);
 }
 
 /* 下拉菜单样式 */
@@ -210,67 +201,6 @@ onMounted(() => {
 
 :deep(.el-dropdown-item:hover) {
   background-color: var(--hover-color);
-=======
-  gap: 12px;
-  padding: 8px 12px;
-  border-radius: 8px;
-  transition: all 0.3s ease;
-}
-
-.user:hover {
-  background-color: #f5f7fa;
-}
-
-.user-name {
-  font-size: 14px;
-  color: #303133;
-  font-weight: 500;
-}
-
-.dropdown-icon {
-  font-size: 12px;
-  color: #909399;
-  transition: transform 0.3s ease;
-}
-
-.user:hover .dropdown-icon {
-  transform: rotate(180deg);
-}
-
-/* 深色主题适配 */
-:deep(.dark) .navbar {
-  background-color: #1f2124;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-}
-
-:deep(.dark) .logo-text {
-  color: #e4e7ed;
-}
-
-:deep(.dark) .control-item {
-  color: #c0c4cc;
-}
-
-:deep(.dark) .control-item:hover {
-  background-color: #2c2e30;
-  color: #409EFF;
-}
-
-:deep(.dark) .user {
-  color: #e4e7ed;
-}
-
-:deep(.dark) .user:hover {
-  background-color: #2c2e30;
-}
-
-:deep(.dark) .user-name {
-  color: #e4e7ed;
-}
-
-:deep(.dark) .dropdown-icon {
-  color: #909399;
->>>>>>> 1b530287610d5542af690559257e22cf06392cd0
 }
 </style>
  

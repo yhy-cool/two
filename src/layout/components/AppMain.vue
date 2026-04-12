@@ -37,15 +37,10 @@ watch(
 
 <style scoped>
 .app-main {
-<<<<<<< HEAD
-  padding: 20px;
+  padding: 24px;
   background-color: var(--bg-color) !important;
   min-height: calc(100vh - 60px);
   color: var(--text-color) !important;
-=======
-  padding: 24px;
-  min-height: calc(100vh - 60px);
-  background-color: #f5f7fa;
   transition: all 0.3s ease;
 }
 
@@ -61,17 +56,11 @@ watch(
   transform: translateY(10px);
 }
 
-/* 深色主题适配 */
-:deep(.dark) .app-main {
-  background-color: #1a1a1a;
-}
-
 /* 响应式布局 */
 @media (max-width: 768px) {
   .app-main {
     padding: 16px;
   }
->>>>>>> 1b530287610d5542af690559257e22cf06392cd0
 }
 </style>
  
