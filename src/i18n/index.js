@@ -2,17 +2,18 @@ import { createI18n } from 'vue-i18n'
 import zhCN from './locales/zh-CN.js'
 import enUS from './locales/en-US.js'
 
-// 从localStorage获取语言设置，默认为中文
-const lang = localStorage.getItem('language') || 'zh-CN'
-
 const i18n = createI18n({
   legacy: false, // 使用Composition API
-  locale: lang,
+  locale: localStorage.getItem('language') || 'zh-CN',
   messages: {
     'zh-CN': zhCN,
     'en-US': enUS
   }
 })
 
+// 导出i18n实例和更新语言的方法
 export default i18n
 export { zhCN, enUS }
+export const updateLanguage = (locale) => {
+  i18n.global.locale.value = locale
+}

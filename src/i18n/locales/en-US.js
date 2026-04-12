@@ -14,6 +14,7 @@ export default {
     userManagement: 'User Management',
     addUser: 'Add User',
     batchDelete: 'Batch Delete',
+    importExcel: 'Import Excel',
     exportExcel: 'Export Excel',
     searchPlaceholder: 'Search username or email',
     id: 'ID',
@@ -21,6 +22,9 @@ export default {
     name: 'Name',
     email: 'Email',
     role: 'Role',
+    roleAdmin: 'Admin',
+    roleManager: 'Manager',
+    roleEmployee: 'Employee',
     status: 'Status',
     createdAt: 'Created At',
     actions: 'Actions',
@@ -106,5 +110,19 @@ export default {
     language: 'Language',
     chinese: '中文',
     english: 'English'
+  },
+  sidebar: {
+    home: 'Home',
+    userManagement: 'User Management',
+    userList: 'User List',
+    roleList: 'Role List',
+    permissionList: 'Permission List',
+    dashboard: 'Data Visualization',
+    profile: 'Profile'
+  },
+  navbar: {
+    title: 'Backend Management System',
+    profile: 'Profile',
+    logout: 'Logout'
   }
 }

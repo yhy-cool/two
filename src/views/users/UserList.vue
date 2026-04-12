@@ -134,9 +134,9 @@
         </el-form-item>
         <el-form-item :label="t('user.role')" prop="role" v-if="canAssignRole">
           <el-select v-model="userForm.role" :placeholder="t('user.selectRole')">
-            <el-option label="管理员" value="admin" />
-            <el-option label="经理" value="manager" />
-            <el-option label="员工" value="employee" />
+            <el-option :label="t('user.roleAdmin')" value="admin" />
+            <el-option :label="t('user.roleManager')" value="manager" />
+            <el-option :label="t('user.roleEmployee')" value="employee" />
           </el-select>
         </el-form-item>
         <el-form-item :label="t('user.password')" prop="password" v-if="!isEdit">
@@ -298,9 +298,9 @@ const paginatedUsers = computed(() => {
 // 获取角色名称
 const getRoleName = (role) => {
   const roleMap = {
-    admin: '管理员',
-    manager: '经理',
-    employee: '员工'
+    admin: t('user.roleAdmin'),
+    manager: t('user.roleManager'),
+    employee: t('user.roleEmployee')
   }
   return roleMap[role] || role
 }
@@ -482,12 +482,12 @@ const handleExportExcel = () => {
   try {
     const headers = [
       { key: 'id', title: 'ID' },
-      { key: 'username', title: '用户名' },
-      { key: 'name', title: '姓名' },
-      { key: 'email', title: '邮箱' },
-      { key: 'role', title: '角色' },
-      { key: 'status', title: '状态' },
-      { key: 'createdAt', title: '创建时间' }
+      { key: 'username', title: t('user.username') },
+      { key: 'name', title: t('user.name') },
+      { key: 'email', title: t('user.email') },
+      { key: 'role', title: t('user.role') },
+      { key: 'status', title: t('user.status') },
+      { key: 'createdAt', title: t('user.createdAt') }
     ]
     
     // 转换角色和状态为中文
@@ -508,6 +508,8 @@ const handleExportExcel = () => {
 <style scoped>
 .user-list {
   padding: 20px;
+  background-color: var(--bg-color);
+  min-height: calc(100vh - 100px);
 }
 
 .card-header {
@@ -535,5 +537,62 @@ const handleExportExcel = () => {
   display: flex;
   justify-content: flex-end;
   gap: 10px;
+}
+
+/* 确保卡片和表格响应主题切换 */
+:deep(.el-card) {
+  background-color: var(--card-bg) !important;
+  border-color: var(--border-color) !important;
+}
+
+:deep(.el-card__header) {
+  background-color: var(--card-bg) !important;
+  border-bottom: 1px solid var(--border-color) !important;
+}
+
+:deep(.el-table) {
+  background-color: var(--card-bg) !important;
+}
+
+:deep(.el-table th) {
+  background-color: var(--card-bg) !important;
+  color: var(--text-color) !important;
+  border-bottom: 1px solid var(--border-color) !important;
+}
+
+:deep(.el-table tr) {
+  background-color: var(--card-bg) !important;
+  color: var(--text-color) !important;
+}
+
+:deep(.el-table tr:hover) {
+  background-color: var(--hover-color) !important;
+}
+
+:deep(.el-table td) {
+  border-bottom: 1px solid var(--border-color) !important;
+  color: var(--text-color) !important;
+}
+
+/* 确保分页组件响应主题切换 */
+:deep(.el-pagination) {
+  color: var(--text-color) !important;
+}
+
+:deep(.el-pagination__button) {
+  background-color: var(--card-bg) !important;
+  border-color: var(--border-color) !important;
+  color: var(--text-color) !important;
+}
+
+:deep(.el-pagination__button:hover) {
+  color: var(--primary-color) !important;
+  border-color: var(--primary-color) !important;
+}
+
+:deep(.el-pagination__button--active) {
+  background-color: var(--primary-color) !important;
+  border-color: var(--primary-color) !important;
+  color: white !important;
 }
 </style>

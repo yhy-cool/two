@@ -21,6 +21,9 @@ export default {
     name: '姓名',
     email: '邮箱',
     role: '角色',
+    roleAdmin: '管理员',
+    roleManager: '经理',
+    roleEmployee: '员工',
     status: '状态',
     createdAt: '创建时间',
     actions: '操作',
@@ -112,5 +115,19 @@ export default {
     language: '语言',
     chinese: '中文',
     english: 'English'
+  },
+  sidebar: {
+    home: '首页',
+    userManagement: '用户管理',
+    userList: '用户列表',
+    roleList: '角色列表',
+    permissionList: '权限列表',
+    dashboard: '数据可视化',
+    profile: '我的'
+  },
+  navbar: {
+    title: '后台管理系统',
+    profile: '个人中心',
+    logout: '退出登录'
   }
 }

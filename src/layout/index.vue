@@ -1,14 +1,14 @@
 <template>
   <div class="common-layout">
     <el-container style="height: 100vh;">
-      <el-aside width="200px" style="background-color: #303133; color: white;">
+      <el-aside width="200px" class="layout-aside">
         <Sidebar />
       </el-aside>
       <el-container>
-        <el-header height="60px" style="background-color: #409EFF; color: white;">
+        <el-header height="60px" class="layout-header">
           <Navbar />
         </el-header>
-        <el-main style="background-color: #f0f2f5;">
+        <el-main class="layout-main">
           <AppMain />
         </el-main>
       </el-container>
@@ -26,6 +26,24 @@ import Sidebar from './components/Sidebar/index.vue'
 .common-layout {
   width: 100%;
   height: 100vh;
+}
+
+.layout-aside {
+  background-color: var(--bg-color) !important;
+  color: var(--text-color) !important;
+  border-right: 1px solid var(--border-color);
+}
+
+.layout-header {
+  background-color: var(--navbar-bg) !important;
+  color: var(--navbar-text) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.layout-main {
+  background-color: var(--bg-color) !important;
+  color: var(--text-color) !important;
+  padding: 0;
 }
 </style>
  

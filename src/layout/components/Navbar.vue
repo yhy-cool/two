@@ -1,7 +1,7 @@
 <template>
   <div class="navbar">
     <div class="navbar-left">
-      <span class="logo">后台管理系统</span>
+      <span class="logo">{{ t('navbar.title') }}</span>
     </div>
     <div class="navbar-right">
       <div class="controls">
@@ -20,8 +20,8 @@
         </span>
         <template #dropdown>
           <el-dropdown-menu>
-            <el-dropdown-item @click="navigateToProfile">个人中心</el-dropdown-item>
-            <el-dropdown-item @click="handleLogout">退出登录</el-dropdown-item>
+            <el-dropdown-item @click="navigateToProfile">{{ t('navbar.profile') }}</el-dropdown-item>
+            <el-dropdown-item @click="handleLogout">{{ t('navbar.logout') }}</el-dropdown-item>
           </el-dropdown-menu>
         </template>
       </el-dropdown>
@@ -85,11 +85,15 @@ onMounted(() => {
   justify-content: space-between;
   align-items: center;
   padding: 0 20px;
+  background-color: var(--navbar-bg);
+  color: var(--navbar-text);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .logo {
   font-size: 18px;
   font-weight: bold;
+  color: var(--navbar-text);
 }
 
 .navbar-right {
@@ -109,12 +113,12 @@ onMounted(() => {
   display: flex;
   align-items: center;
   gap: 5px;
-  color: white;
+  color: var(--navbar-text);
   transition: color 0.3s ease;
 }
 
 .language-switch:hover, .theme-switch:hover {
-  color: #e6f7ff;
+  color: var(--primary-color);
 }
 
 .user {
@@ -122,7 +126,22 @@ onMounted(() => {
   display: flex;
   align-items: center;
   gap: 8px;
-  color: white;
+  color: var(--navbar-text);
+}
+
+/* 下拉菜单样式 */
+:deep(.el-dropdown-menu) {
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+}
+
+:deep(.el-dropdown-item) {
+  color: var(--text-color);
+}
+
+:deep(.el-dropdown-item:hover) {
+  background-color: var(--hover-color);
 }
 </style>
  

@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import { updateLanguage } from '../i18n'
 
 export const useGlobalStore = defineStore('global', {
   state: () => ({
@@ -12,6 +13,8 @@ export const useGlobalStore = defineStore('global', {
     switchLanguage() {
       this.language = this.language === 'zh-CN' ? 'en-US' : 'zh-CN'
       localStorage.setItem('language', this.language)
+      // 更新i18n语言
+      updateLanguage(this.language)
     },
     // 切换主题
     switchTheme() {
@@ -23,6 +26,10 @@ export const useGlobalStore = defineStore('global', {
     // 初始化主题
     initTheme() {
       document.documentElement.setAttribute('data-theme', this.theme)
+    },
+    // 初始化语言
+    initLanguage() {
+      updateLanguage(this.language)
     }
   }
 })

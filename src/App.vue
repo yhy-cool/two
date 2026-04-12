@@ -6,8 +6,9 @@ import { useI18n } from 'vue-i18n'
 const globalStore = useGlobalStore()
 const { locale } = useI18n()
 
-// 初始化主题
+// 初始化语言和主题
 onMounted(() => {
+  globalStore.initLanguage()
   globalStore.initTheme()
   // 同步Pinia中的语言到i18n
   locale.value = globalStore.language
@@ -36,6 +37,11 @@ watch(() => globalStore.theme, (newTheme) => {
   --text-color: #303133;
   --card-bg: #ffffff;
   --border-color: #dcdfe6;
+  --primary-color: #409EFF;
+  --hover-color: #ecf5ff;
+  --active-color: #ecf5ff;
+  --navbar-bg: #ffffff;
+  --navbar-text: #303133;
 }
 
 [data-theme="dark"] {
@@ -43,6 +49,11 @@ watch(() => globalStore.theme, (newTheme) => {
   --text-color: #e4e7ed;
   --card-bg: #2c2c2c;
   --border-color: #4e4e4e;
+  --primary-color: #409EFF;
+  --hover-color: #2c3036;
+  --active-color: #2c3036;
+  --navbar-bg: #1a1a1a;
+  --navbar-text: #e4e7ed;
 }
 
 body {
