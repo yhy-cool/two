@@ -218,13 +218,20 @@ const userFormRef = ref(null)
 
 // 获取当前用户信息
 const getCurrentUser = () => {
-  const userInfoStr = localStorage.getItem('userInfo')
-  return userInfoStr ? JSON.parse(userInfoStr) : null
+  try {
+    const userInfoStr = localStorage.getItem('userInfo')
+    console.log('User info from localStorage:', userInfoStr)
+    return userInfoStr ? JSON.parse(userInfoStr) : null
+  } catch (error) {
+    console.error('Error getting current user:', error)
+    return null
+  }
 }
 
 // 权限控制
 const canAddUser = computed(() => {
   const currentUser = getCurrentUser()
+  console.log('Current user:', currentUser)
   return currentUser && (currentUser.role === 'admin' || currentUser.role === 'manager')
 })
 

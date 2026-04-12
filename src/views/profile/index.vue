@@ -25,6 +25,9 @@
         <el-form-item :label="t('profile.role')" prop="role">
           <el-input v-model="userInfo.role" disabled />
         </el-form-item>
+        <el-form-item :label="t('profile.createdAt')" prop="createdAt">
+          <el-input v-model="userInfo.createdAt" disabled />
+        </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="handleSave">{{ t('profile.save') }}</el-button>
         </el-form-item>
@@ -45,7 +48,8 @@ const userInfo = ref({
   username: '',
   name: '',
   email: '',
-  role: ''
+  role: '',
+  createdAt: ''
 })
 
 const profileFormRef = ref(null)
