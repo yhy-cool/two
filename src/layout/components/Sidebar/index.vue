@@ -28,14 +28,6 @@
           <span>{{ t('sidebar.permissionList') }}</span>
         </el-menu-item>
       </el-sub-menu>
-      <el-menu-item index="/dashboard">
-        <el-icon><i class="el-icon-data-analysis"></i></el-icon>
-        <span>{{ t('sidebar.dashboard') }}</span>
-      </el-menu-item>
-      <el-menu-item index="/profile">
-        <el-icon><i class="el-icon-user"></i></el-icon>
-        <span>{{ t('sidebar.profile') }}</span>
-      </el-menu-item>
       <el-sub-menu index="/article">
         <template #title>
           <el-icon><i class="el-icon-document"></i></el-icon>
@@ -48,6 +40,14 @@
           <span>创建文章</span>
         </el-menu-item>
       </el-sub-menu>
+      <el-menu-item index="/dashboard">
+        <el-icon><i class="el-icon-data-analysis"></i></el-icon>
+        <span>{{ t('sidebar.dashboard') }}</span>
+      </el-menu-item>
+      <el-menu-item index="/profile">
+        <el-icon><i class="el-icon-user"></i></el-icon>
+        <span>{{ t('sidebar.profile') }}</span>
+      </el-menu-item>
     </el-menu>
   </div>
 </template>

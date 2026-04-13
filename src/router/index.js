@@ -98,10 +98,16 @@ const router = createRouter({
 
 // 路由守卫
 router.beforeEach((to, from) => {
+  // 检查是否存在token
+  const token = localStorage.getItem('token')
+  
+  // 如果有token且尝试访问登录页面，重定向到首页
+  if (token && to.path === '/login') {
+    return '/'
+  }
+  
   // 检查路由是否需要鉴权
   if (to.meta.requiresAuth) {
-    // 检查是否存在token
-    const token = localStorage.getItem('token')
     if (token) {
       // 存在token，继续访问
       return true
